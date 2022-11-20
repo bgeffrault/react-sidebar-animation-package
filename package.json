@@ -1,0 +1,49 @@
+{
+  "name": "react-sidebar-animation",
+  "version": "0.0.1",
+  "description": "React hooks for sidebar animation",
+  "author": "Baptiste Geffrault (bgeffrault)",
+  "license": "MIT",
+  "repository": "react-sidebar-animation",
+  "main": "dist/index.js",
+  "engines": {
+    "node": ">=8",
+    "npm": ">=5"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "start": "rollup -c -w"
+  },
+  "peerDependencies": {
+    "react": ">=16"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.20",
+    "@types/react-dom": "^18.0.6",
+    "babel-core": "^6.26.3",
+    "babel-runtime": "^6.26.0",
+    "eslint-plugin-react": "^7.31.8",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "rollup": "^1.29.0",
+    "rollup-plugin-typescript2": "^0.25.3",
+    "rollup-plugin-uglify": "^5.0.2",
+    "typescript": "^4.8.3"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "keywords": [
+    "react",
+    "sidebar",
+    "animation",
+    "react hooks",
+    "typescript"
+  ],
+  "dependencies": {
+    "gsap": "^3.11.3"
+  }
+}
