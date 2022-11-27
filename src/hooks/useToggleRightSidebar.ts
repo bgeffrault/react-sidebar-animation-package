@@ -1,9 +1,7 @@
-import { RefObject, useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import gsap from "gsap";
 
 type useToggleRightSidebarProps = {
-  bodyRef: RefObject<HTMLDivElement | null>;
-  sidebarRef: RefObject<HTMLDivElement | null>;
   initialState?: "opened" | "closed";
   sidebarWidth?: number | string;
   mobileOnly?: boolean;
