@@ -95,7 +95,7 @@ export const useToggleRightSidebar = ({
       gsap.set(sidebarRef.current, { clearProps: 'xPercent' });
       gsap.set(bodyRef.current, { clearProps: 'xPercent' });
     }
-  }, []);
+  }, [isSmallScreen, mobileOnly]);
 
   return { handleToggleSidebar, bodyRef, sidebarRef };
 };
