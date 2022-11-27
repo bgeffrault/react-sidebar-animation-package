@@ -4,23 +4,23 @@ import gsap from "gsap";
 type useToggleRightSidebarProps = {
   bodyRef: RefObject<HTMLDivElement | null>;
   sidebarRef: RefObject<HTMLDivElement | null>;
-  initialState?: "opening" | "closing";
+  initialState?: "opened" | "closed";
   sidebarWidth?: number | string;
   mobileOnly?: boolean;
   isSmallScreen?: boolean;
 };
 
 export const useToggleRightSidebar = ({
-  bodyRef,
-  sidebarRef,
-  initialState = "opening",
+  initialState = "opened",
   sidebarWidth = 247,
   mobileOnly,
   isSmallScreen = false
 }: useToggleRightSidebarProps) => {
+  const bodyRef = useRef<HTMLDivElement | null>(null);  
+  const sidebarRef = useRef<HTMLDivElement | null>(null);  
   const animationState = useRef<{ tl: GSAPTimeline | null; lastState: string }>(
     {
-      lastState: isSmallScreen ? "closing" : initialState,
+      lastState: isSmallScreen ? "closed" : initialState,
       tl: null,
     }
   );
@@ -30,8 +30,8 @@ export const useToggleRightSidebar = ({
   const handleToggleSidebar = useCallback(
     async (callback?: () => any) => {
       if (mobileOnly && !isSmallScreen) return;
-      if (animationState.current.lastState === "opening") {
-        animationState.current.lastState = "closing";
+      if (animationState.current.lastState === "opened") {
+        animationState.current.lastState = "closed";
         animationState.current.tl?.kill();
         animationState.current.tl = gsap
           .timeline({
@@ -45,7 +45,7 @@ export const useToggleRightSidebar = ({
           animationState.current.tl.to(bodyRef.current, { width: "100%" }, 0);
         }
       } else {
-        animationState.current.lastState = "opening";
+        animationState.current.lastState = "opened";
         animationState.current.tl?.kill();
         animationState.current.tl = gsap
           .timeline({
@@ -63,7 +63,7 @@ export const useToggleRightSidebar = ({
           );
         }
       }
-      if (callback) {
+      if (callback && typeof callback === "function") {
         animationState.current.tl.call(callback);
       }
       await animationState.current.tl.restart();
@@ -72,11 +72,11 @@ export const useToggleRightSidebar = ({
   );
 
   useEffect(() => {
-    if (animationState.current.lastState === "closing") {
+    if (animationState.current.lastState === "closed") {
       gsap.set(sidebarRef.current, { xPercent: 100 });
       gsap.set(bodyRef.current, { width: "100%" });
     }
-    if (animationState.current.lastState === "opening") {
+    if (animationState.current.lastState === "opened") {
       if (isSmallScreen) {
         gsap.set(bodyRef.current, { clearProps: "width" });
         gsap.set(bodyRef.current, { xPercent: -100 });
@@ -92,5 +92,5 @@ export const useToggleRightSidebar = ({
     }
   }, [isSmallScreen]);
 
-  return handleToggleSidebar;
+  return {handleToggleSidebar, bodyRef, sidebarRef};
 };
