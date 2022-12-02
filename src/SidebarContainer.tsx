@@ -4,9 +4,10 @@ import { forwardRef } from 'react';
 interface IFullWidthSidebar {
   style?: Object;
   children: JSX.Element;
+  className?: string;
 }
 
-const FullWidthSidebar = forwardRef(({ children, style }: IFullWidthSidebar, ref: React.ForwardedRef<HTMLDivElement>) => {
+const FullWidthSidebar = forwardRef(({ children, style, className }: IFullWidthSidebar, ref: React.ForwardedRef<HTMLDivElement>) => {
   return (
     <div
       style={{
@@ -17,6 +18,7 @@ const FullWidthSidebar = forwardRef(({ children, style }: IFullWidthSidebar, ref
         boxSizing: 'border-box',
       }}
       ref={ref}
+      className={className}
     >
       {children}
     </div>
@@ -24,22 +26,49 @@ const FullWidthSidebar = forwardRef(({ children, style }: IFullWidthSidebar, ref
 });
 
 interface ISidebarContainer {
+  /**
+   * Set the sidebar width
+   */
   width?: number;
+  /**
+   * Sidebar open on the right by default, set to true to open on the left
+   */
   leftSide?: boolean;
+  /**
+   * Change the animation: Display the sidebar on the whole screen
+   */
   fullWidth?: boolean;
-  style?: Object;
+  /**
+   * Additional styled to be applied to the sidebar
+   */
+  style?: {[key: string]: any};
   children: JSX.Element;
+  /**
+   * Hide/Show sidebar
+   */
   open: boolean;
+  /**
+   * Applied to the sidebar content in normal mode (not fullWidth), and to the sidebar in fullWidth mode
+   */
+  className?: string;
+  /**
+   * animatedDivClassName: className to be applied to the animated div in the "normal" (not fullWidth) case
+   * For normal case we render an animated div containing another div who contains the sidebar content
+   */
+  animatedDivClassName?: string;
 }
 
+/**
+ * 
+ */
 export const SidebarContainer = forwardRef(
   (
-    { width, leftSide, fullWidth, style, children, open }: ISidebarContainer,
+    { width = 200, leftSide, fullWidth, style, children, open, className, animatedDivClassName }: ISidebarContainer,
     ref: React.ForwardedRef<HTMLDivElement>,
   ) => {
     if (fullWidth) {
       return (
-        <FullWidthSidebar style={style} ref={ref}>
+        <FullWidthSidebar style={style} ref={ref} className={className}>
           {children}
         </FullWidthSidebar>
       );
@@ -88,8 +117,9 @@ export const SidebarContainer = forwardRef(
           flexShrink: 0,
         }}
         ref={ref}
+        className={animatedDivClassName}
       >
-        <div style={{ ...rest, ...sx }}>{children}</div>
+        <div style={{ ...rest, ...sx }} className={className} >{children}</div>
       </div>
     );
   },

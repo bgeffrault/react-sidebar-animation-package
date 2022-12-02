@@ -24,13 +24,47 @@ const useLiveRef = <T>(value: T) => {
   return ref;
 };
 
+interface AnimatedSidebar {
+  /**
+   * Open the sidebar at first render 
+   * Default: false
+   */
+  initiallyOpen?: boolean;
+  /**
+   * Apply width to the sidebar
+   * Default: 200
+   */
+  sidebarWidth?: number;
+  /**
+   * Choose opening side
+   * Default: false (right side)
+   */
+  leftSide?: boolean;
+  /**
+   * Apply zIndex to the sidebar
+   * Default: 1
+   */
+  sidebarZIndex?: number;
+  /**
+   * Choose mode of the sidebar
+   * Normal mode (not full width) the sidebar will push the content
+   * Full width mode the sidebar will overlay the content (it uses the first relative parent)
+   */
+  fullWidth?: boolean;
+}
+
+/**
+ * Hook to animate the SidebarContainer
+ * Spread the returned props on the SidebarContainer
+ * @param param0 
+ */
 export const useSidebar = ({
   initiallyOpen = false,
-  sidebarWidth = 320,
+  sidebarWidth = 200,
   fullWidth = false,
   leftSide = false,
   sidebarZIndex = 1,
-}) => {
+}: AnimatedSidebar) => {
   const [openState, setOpenState] = useState(initiallyOpen);
   const openStateRef = useLiveRef(openState);
   const sidebarRef = useRef<HTMLElement>(null);
