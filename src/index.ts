@@ -1,2 +1,2 @@
-export { useToggleAnimation } from './hooks/useToggleAnimation';
-export { useToggleRightSidebar } from './hooks/useToggleRightSidebar';
+export { useSidebar } from './useSidebar';
+export { SidebarContainer } from './SidebarContainer';

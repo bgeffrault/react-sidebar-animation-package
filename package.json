@@ -1,7 +1,7 @@
 {
   "name": "react-sidebar-animation",
-  "version": "0.0.5",
-  "description": "React hooks for sidebar animation",
+  "version": "0.1.0",
+  "description": "Animated sidebar component for React",
   "author": "Baptiste Geffrault (bgeffrault)",
   "license": "MIT",
   "repository": "react-sidebar-animation",
