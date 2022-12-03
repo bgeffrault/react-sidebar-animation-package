@@ -78,7 +78,7 @@ export const useSidebar = ({
 
   const DURATION = useMemo(() => (fullWidth ? 0.6 : 0.8), [fullWidth]);
 
-  const handleToggleSidebar = useCallback(
+  const toggleSidebar = useCallback(
     async (callback: gsap.Callback) => {
       if (!sidebarRef.current) return;
 
@@ -118,13 +118,14 @@ export const useSidebar = ({
   }, [fullWidth, sidebarWidth, sidebarZIndex, leftSide, openStateRef]);
 
   return {
-    handleToggleSidebar,
+    toggleSidebar,
     open: openState,
     state: {
       ref: sidebarRef,
       width: sidebarWidth,
       leftSide,
       fullWidth,
+      open: openState,
     },
   };
 };

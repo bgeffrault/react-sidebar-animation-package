@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { forwardRef } from 'react';
 
 interface IFullWidthSidebar {
@@ -44,9 +44,10 @@ interface ISidebarContainer {
   style?: {[key: string]: any};
   children: JSX.Element;
   /**
-   * Hide/Show sidebar
+   * Sidebar zIndex
+   * Default: 1
    */
-  open: boolean;
+   zIndex?: number;
   /**
    * Applied to the sidebar content in normal mode (not fullWidth), and to the sidebar in fullWidth mode
    */
@@ -62,8 +63,8 @@ interface ISidebarContainer {
  * 
  */
 export const SidebarContainer = forwardRef(
-  (
-    { width = 200, leftSide, fullWidth, style, children, open, className, animatedDivClassName }: ISidebarContainer,
+  memo((
+    { width = 320, leftSide, fullWidth, style, children, zIndex = 1, className, animatedDivClassName }: ISidebarContainer,
     ref: React.ForwardedRef<HTMLDivElement>,
   ) => {
     if (fullWidth) {
@@ -83,19 +84,6 @@ export const SidebarContainer = forwardRef(
     };
     leftSide ? (sx.right = 0) : (sx.left = 0);
 
-    const {
-      zIndex,
-      border,
-      borderColor,
-      borderLeft,
-      borderRight,
-      boxShadow,
-      margin,
-      marginRight,
-      marginLeft,
-      borderStyle,
-      ...rest
-    } = (style ?? {}) as {[key: string]: any};
 
     return (
       <div
@@ -103,24 +91,14 @@ export const SidebarContainer = forwardRef(
           height: '100%',
           width,
           position: 'relative',
-          backgroundColor: rest.backgroundColor ?? 'unset',
           zIndex: zIndex ?? 1,
-          border: border ?? 'initial',
-          borderLeft: borderLeft ?? 'initial',
-          borderRight: borderRight ?? 'initial',
-          borderColor: borderColor ?? 'unset',
-          borderStyle: open ? borderStyle ?? 'none' : 'none',
-          boxShadow: open ? boxShadow ?? 'none' : 'none',
-          margin: open ? margin ?? 0 : 0,
-          marginRight: open ? margin ?? 0 : 0,
-          marginLeft: open ? margin ?? 0 : 0,
           flexShrink: 0,
         }}
         ref={ref}
         className={animatedDivClassName}
       >
-        <div style={{ ...rest, ...sx }} className={className} >{children}</div>
+        <div style={{ ...style, ...sx }} className={className} >{children}</div>
       </div>
     );
   },
-);
+));
