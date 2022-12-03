@@ -1,5 +1,13 @@
 # React animated Sidebar v0.
 
+## Installation
+
+```shell
+$ npm i react-sidebar-animation
+```
+
+## Description
+
 An animated sidebar shell for React
 
 Two behavior:
@@ -9,7 +17,7 @@ Two behavior:
 
 The combination is useful if your are looking for a responsive sidebar that has those 2 behaviors depending on your screen size.
 
-Example:
+## Example:
 
 ```js
 const Example = () => {
@@ -62,3 +70,5 @@ const Example = () => {
   );
 };
 ```
+
+See the [package source](https://github.com/bgeffrault/react-sidebar-animation-package) for more details.

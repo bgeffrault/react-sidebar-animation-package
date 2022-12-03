@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React from 'react';
 import { forwardRef } from 'react';
 
 interface IFullWidthSidebar {
@@ -60,10 +60,10 @@ interface ISidebarContainer {
 }
 
 /**
- * 
+ * SidebarContainer
  */
 export const SidebarContainer = forwardRef(
-  memo((
+  (
     { width = 320, leftSide, fullWidth, style, children, zIndex = 1, className, animatedDivClassName }: ISidebarContainer,
     ref: React.ForwardedRef<HTMLDivElement>,
   ) => {
@@ -101,4 +101,4 @@ export const SidebarContainer = forwardRef(
       </div>
     );
   },
-));
+);
