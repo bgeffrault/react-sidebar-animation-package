@@ -1,4 +1,4 @@
-# React animated Sidebar v0.
+# React animated Sidebar v1.0.0
 
 ## Installation
 
@@ -8,7 +8,7 @@ $ npm i react-sidebar-animation
 
 ## Description
 
-An animated sidebar shell for React
+An animated sidebar shell for React.
 
 Two behavior:
 
@@ -16,6 +16,10 @@ Two behavior:
 - Open in fullWidth
 
 The combination is useful if your are looking for a responsive sidebar that has those 2 behaviors depending on your screen size.
+
+## Demo
+
+See the [demo](https://react-sidebar-animation-example.vercel.app/) with [demo source code](https://github.com/bgeffrault/react-sidebar-animation-example).
 
 ## Example:
 
@@ -47,21 +51,11 @@ const Example = () => {
       <SidebarContainer
         {...state}
         style={{
-          backgroundImage: `linear-gradient(
-                  120deg,
-                  hsl(240deg 100% 20%) 0%,
-                  hsl(289deg 100% 21%) 11%,
-                  hsl(315deg 100% 27%) 20%,
-                  hsl(329deg 100% 36%) 29%,
-                  hsl(337deg 100% 43%) 38%,
-                  hsl(357deg 91% 59%) 46%,
-                  hsl(17deg 100% 59%) 56%,
-                  hsl(34deg 100% 53%) 68%,
-                  hsl(45deg 100% 50%) 82%,
-                  hsl(55deg 100% 50%) 100%
-              )`,
+          backgroundColor: '#1976D2',
           color: 'white',
           padding: '8px',
+          boxShadow: '2px 0px 2px 1px #1575C0',
+          marginRight: '2px',
         }}
       >
         <div>Sidebar</div>
