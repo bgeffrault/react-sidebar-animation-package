@@ -5,25 +5,32 @@ interface IFullWidthSidebar {
   style?: Object;
   children: JSX.Element;
   className?: string;
+  zIndex: number;
 }
 
-const FullWidthSidebar = forwardRef(({ children, style, className }: IFullWidthSidebar, ref: React.ForwardedRef<HTMLDivElement>) => {
-  return (
-    <div
-      style={{
-        ...style,
-        height: '100%',
-        width: '100%',
-        position: 'absolute',
-        boxSizing: 'border-box',
-      }}
-      ref={ref}
-      className={className}
-    >
-      {children}
-    </div>
-  );
-});
+const FullWidthSidebar = forwardRef(
+  (
+    { children, style, className, zIndex }: IFullWidthSidebar,
+    ref: React.ForwardedRef<HTMLDivElement>,
+  ) => {
+    return (
+      <div
+        style={{
+          ...style,
+          height: '100%',
+          width: '100%',
+          position: 'absolute',
+          boxSizing: 'border-box',
+          zIndex,
+        }}
+        ref={ref}
+        className={className}
+      >
+        {children}
+      </div>
+    );
+  },
+);
 
 interface ISidebarContainer {
   /**
@@ -41,13 +48,13 @@ interface ISidebarContainer {
   /**
    * Additional styled to be applied to the sidebar
    */
-  style?: {[key: string]: any};
+  style?: { [key: string]: any };
   children: JSX.Element;
   /**
    * Sidebar zIndex
    * Default: 1
    */
-   zIndex?: number;
+  zIndex?: number;
   /**
    * Applied to the sidebar content in normal mode (not fullWidth), and to the sidebar in fullWidth mode
    */
@@ -64,18 +71,32 @@ interface ISidebarContainer {
  */
 export const SidebarContainer = forwardRef(
   (
-    { width = 320, leftSide, fullWidth, style, children, zIndex = 1, className, animatedDivClassName }: ISidebarContainer,
+    {
+      width = 320,
+      leftSide,
+      fullWidth,
+      style,
+      children,
+      zIndex = 1,
+      className,
+      animatedDivClassName,
+    }: ISidebarContainer,
     ref: React.ForwardedRef<HTMLDivElement>,
   ) => {
     if (fullWidth) {
       return (
-        <FullWidthSidebar style={style} ref={ref} className={className}>
+        <FullWidthSidebar
+          style={style}
+          zIndex={zIndex}
+          ref={ref}
+          className={className}
+        >
           {children}
         </FullWidthSidebar>
       );
     }
 
-    const sx: {[key: string]: any} = {
+    const sx: { [key: string]: any } = {
       position: 'absolute',
       top: 0,
       bottom: 0,
@@ -83,7 +104,6 @@ export const SidebarContainer = forwardRef(
       boxSizing: 'border-box',
     };
     leftSide ? (sx.right = 0) : (sx.left = 0);
-
 
     return (
       <div
@@ -97,7 +117,9 @@ export const SidebarContainer = forwardRef(
         ref={ref}
         className={animatedDivClassName}
       >
-        <div style={{ ...style, ...sx }} className={className} >{children}</div>
+        <div style={{ ...style, ...sx }} className={className}>
+          {children}
+        </div>
       </div>
     );
   },
