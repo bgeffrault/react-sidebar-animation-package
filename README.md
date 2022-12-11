@@ -1,4 +1,4 @@
-# React animated Sidebar v1.0.0
+# React animated Sidebar
 
 ## Installation
 
