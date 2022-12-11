@@ -85,6 +85,8 @@ export const useSidebar = ({
   sidebarZIndex = 1,
 }: AnimatedSidebar) => {
   const [openState, setOpenState] = useState(initiallyOpen);
+  const [inTransition, setInTransition] = useState(false);
+
   const openStateRef = useLiveRef(openState);
   const sidebarRef = useRef<HTMLElement>(null);
   const animationState = useRef<{ tl: gsap.core.Timeline | null }>({
@@ -101,6 +103,7 @@ export const useSidebar = ({
     async (callback: gsap.Callback) => {
       if (!sidebarRef.current) return;
 
+      setInTransition(true);
       animationState.current.tl?.kill();
       let tl = gsap.timeline({
         paused: true,
@@ -112,9 +115,12 @@ export const useSidebar = ({
         : openSidebar({ tl, sidebarRef, sidebarWidth, fullWidth });
       setOpenState((v) => !v);
 
-      if (typeof callback === 'function') {
-        animationState.current.tl?.call(callback);
-      }
+      animationState.current.tl?.call(() => {
+        setInTransition(false);
+        if (typeof callback === 'function') {
+          callback();
+        }
+      });
 
       await animationState.current.tl?.restart();
     },
@@ -139,12 +145,14 @@ export const useSidebar = ({
   return {
     toggleSidebar,
     open: openState,
+    inTransition,
     state: {
       ref: sidebarRef,
       width: sidebarWidth,
       leftSide,
       fullWidth,
       open: openState,
+      inTransition,
     },
   };
 };

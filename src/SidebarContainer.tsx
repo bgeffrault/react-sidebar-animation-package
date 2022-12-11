@@ -17,7 +17,7 @@ const FullWidthSidebar = forwardRef(
       <div
         style={{
           ...style,
-          height: '100%',
+          height: 'initial',
           width: '100%',
           position: 'absolute',
           boxSizing: 'border-box',

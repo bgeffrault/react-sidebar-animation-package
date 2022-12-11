@@ -25,7 +25,7 @@ See the [demo](https://react-sidebar-animation-example.vercel.app/) with [demo s
 
 ```js
 const Example = () => {
-  const { toggleSidebar, state } = useSidebar({
+  const { toggleSidebar, state, inTransition, open } = useSidebar({
     initiallyOpen: true,
     sidebarWidth: SIDEBAR_WIDTH,
     fullWidth: false,
