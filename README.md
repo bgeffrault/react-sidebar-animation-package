@@ -19,7 +19,7 @@ The combination is useful if your are looking for a responsive sidebar that has 
 
 ## Demo
 
-See the [demo](https://react-sidebar-animation-example.vercel.app/) with [demo source code](https://github.com/bgeffrault/react-sidebar-animation-example).
+See the [demo](https://codesandbox.io/s/happy-tesla-76oszw?file=/src/App.js)
 
 ## Example:
 
