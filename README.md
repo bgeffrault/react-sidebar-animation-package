@@ -27,8 +27,8 @@ See the [demo](https://react-sidebar-animation-example.vercel.app/) with [demo s
 const Example = () => {
   const { toggleSidebar, state, inTransition, open } = useSidebar({
     initiallyOpen: true,
-    sidebarWidth: SIDEBAR_WIDTH,
     fullWidth: false,
+    sidebarWidth: SIDEBAR_WIDTH,
   });
 
   return (
@@ -50,6 +50,7 @@ const Example = () => {
       </div>
       <SidebarContainer
         {...state}
+        zIndex={10}
         style={{
           backgroundColor: '#1976D2',
           color: 'white',

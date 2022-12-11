@@ -82,7 +82,6 @@ export const useSidebar = ({
   sidebarWidth = 200,
   fullWidth = false,
   leftSide = false,
-  sidebarZIndex = 1,
 }: AnimatedSidebar) => {
   const [openState, setOpenState] = useState(initiallyOpen);
   const [inTransition, setInTransition] = useState(false);
@@ -130,7 +129,6 @@ export const useSidebar = ({
   useEffect(() => {
     if (fullWidth) {
       gsap.set(sidebarRef.current, {
-        zIndex: sidebarZIndex,
         xPercent: openStateRef.current ? 0 : leftSide ? -100 : 100,
       });
       return;
@@ -140,7 +138,7 @@ export const useSidebar = ({
       return;
     }
     gsap.set(sidebarRef.current, { width: sidebarWidth });
-  }, [fullWidth, sidebarWidth, sidebarZIndex, leftSide, openStateRef]);
+  }, [fullWidth, sidebarWidth, leftSide, openStateRef]);
 
   return {
     toggleSidebar,

@@ -108,7 +108,7 @@ export const SidebarContainer = forwardRef(
     return (
       <div
         style={{
-          height: '100%',
+          height: 'initial',
           width,
           position: 'relative',
           zIndex: zIndex ?? 1,
