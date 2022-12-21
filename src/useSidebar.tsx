@@ -1,18 +1,34 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import gsap from 'gsap';
 
 function openSidebar({
   tl,
   sidebarRef,
+  bodyRef,
   sidebarWidth,
   fullWidth,
+  animatedFullWidthBody,
+  leftSide,
 }: {
   tl: gsap.core.Timeline;
   sidebarRef: React.RefObject<HTMLElement>;
+  bodyRef: React.RefObject<HTMLElement>;
   fullWidth: boolean;
-  sidebarWidth: number;
+  animatedFullWidthBody: boolean;
+  sidebarWidth: number | string;
+  leftSide: boolean;
 }) {
   if (fullWidth) {
+    if (animatedFullWidthBody) {
+      tl = tl.to(bodyRef.current, { xPercent: leftSide ? 100 : -100 }, 0);
+    }
     return tl.to(sidebarRef.current, { xPercent: 0 }, 0);
   }
   return tl.to(sidebarRef.current, { width: sidebarWidth }, 0);
@@ -21,16 +37,23 @@ function openSidebar({
 function closeSidebar({
   tl,
   sidebarRef,
+  bodyRef,
   fullWidth,
   leftSide,
+  animatedFullWidthBody,
 }: {
   tl: gsap.core.Timeline;
   sidebarRef: React.RefObject<HTMLElement>;
+  bodyRef: React.RefObject<HTMLElement>;
   fullWidth: boolean;
   leftSide: boolean;
+  animatedFullWidthBody: boolean;
 }) {
   if (fullWidth) {
-    return (tl = tl.to(sidebarRef.current, { xPercent: leftSide ? -100 : 100 }, 0));
+    if (animatedFullWidthBody) {
+      tl = tl.to(bodyRef.current, { xPercent: 0 }, 0);
+    }
+    return tl.to(sidebarRef.current, { xPercent: leftSide ? -100 : 100 }, 0);
   }
   return (tl = tl.to(sidebarRef.current, { width: 0 }, 0));
 }
@@ -53,7 +76,7 @@ interface AnimatedSidebar {
    * Apply width to the sidebar
    * Default: 200
    */
-  sidebarWidth?: number;
+  sidebarWidth?: number | string;
   /**
    * Choose opening side
    * Default: false (right side)
@@ -70,6 +93,7 @@ interface AnimatedSidebar {
    * Full width mode the sidebar will overlay the content (it uses the first relative parent)
    */
   fullWidth?: boolean;
+  animatedFullWidthBody?: boolean;
 }
 
 /**
@@ -82,12 +106,14 @@ export const useSidebar = ({
   sidebarWidth = 200,
   fullWidth = false,
   leftSide = false,
+  animatedFullWidthBody = false,
 }: AnimatedSidebar) => {
   const [openState, setOpenState] = useState(initiallyOpen);
   const [inTransition, setInTransition] = useState(false);
 
   const openStateRef = useLiveRef(openState);
-  const sidebarRef = useRef<HTMLElement>(null);
+  const sidebarRef = useRef<HTMLDivElement>(null);
+  const bodyRef = useRef<HTMLDivElement>(null);
   const animationState = useRef<{ tl: gsap.core.Timeline | null }>({
     tl: null,
   });
@@ -99,7 +125,8 @@ export const useSidebar = ({
   const DURATION = useMemo(() => (fullWidth ? 0.6 : 0.8), [fullWidth]);
 
   const toggleSidebar = useCallback(
-    async (callback: gsap.Callback) => {
+    async (callback?: gsap.Callback) => {
+      console.log('toggleSidebar');
       if (!sidebarRef.current) return;
 
       setInTransition(true);
@@ -110,8 +137,23 @@ export const useSidebar = ({
       });
 
       animationState.current.tl = openStateRef.current
-        ? closeSidebar({ tl, sidebarRef, fullWidth, leftSide })
-        : openSidebar({ tl, sidebarRef, sidebarWidth, fullWidth });
+        ? closeSidebar({
+            tl,
+            sidebarRef,
+            fullWidth,
+            leftSide,
+            animatedFullWidthBody,
+            bodyRef,
+          })
+        : openSidebar({
+            tl,
+            sidebarRef,
+            sidebarWidth,
+            fullWidth,
+            animatedFullWidthBody,
+            bodyRef,
+            leftSide,
+          });
       setOpenState((v) => !v);
 
       animationState.current.tl?.call(() => {
@@ -123,22 +165,32 @@ export const useSidebar = ({
 
       await animationState.current.tl?.restart();
     },
-    [DURATION, EASING, fullWidth, openStateRef, sidebarWidth, leftSide],
+    [
+      DURATION,
+      EASING,
+      openStateRef,
+      fullWidth,
+      leftSide,
+      animatedFullWidthBody,
+      sidebarWidth,
+    ],
   );
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (fullWidth) {
       gsap.set(sidebarRef.current, {
         xPercent: openStateRef.current ? 0 : leftSide ? -100 : 100,
       });
+
       return;
     }
     if (!openStateRef.current) {
       gsap.set(sidebarRef.current, { width: 0 });
+
       return;
     }
     gsap.set(sidebarRef.current, { width: sidebarWidth });
-  }, [fullWidth, sidebarWidth, leftSide, openStateRef]);
+  }, [fullWidth, sidebarWidth, leftSide, openStateRef, animatedFullWidthBody]);
 
   return {
     toggleSidebar,
@@ -152,5 +204,6 @@ export const useSidebar = ({
       open: openState,
       inTransition,
     },
+    bodyRef,
   };
 };

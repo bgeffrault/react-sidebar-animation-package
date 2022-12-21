@@ -2,7 +2,7 @@ import React from 'react';
 import { forwardRef } from 'react';
 
 interface IFullWidthSidebar {
-  style?: Object;
+  style?: Record<string, any>;
   children: JSX.Element;
   className?: string;
   zIndex: number;
@@ -35,8 +35,9 @@ const FullWidthSidebar = forwardRef(
 interface ISidebarContainer {
   /**
    * Set the sidebar width
+   * @default 320
    */
-  width?: number;
+  width?: number | string;
   /**
    * Sidebar open on the right by default, set to true to open on the left
    */
@@ -109,7 +110,6 @@ export const SidebarContainer = forwardRef(
       <div
         style={{
           height: '100%',
-          width,
           position: 'relative',
           zIndex: zIndex ?? 1,
           flexShrink: 0,
