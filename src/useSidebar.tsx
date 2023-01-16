@@ -8,56 +8,6 @@ import {
 } from 'react';
 import gsap from 'gsap';
 
-function openSidebar({
-  tl,
-  sidebarRef,
-  bodyRef,
-  sidebarWidth,
-  fullWidth,
-  animatedFullWidthBody,
-  leftSide,
-}: {
-  tl: gsap.core.Timeline;
-  sidebarRef: React.RefObject<HTMLElement>;
-  bodyRef: React.RefObject<HTMLElement>;
-  fullWidth: boolean;
-  animatedFullWidthBody: boolean;
-  sidebarWidth: number | string;
-  leftSide: boolean;
-}) {
-  if (fullWidth) {
-    if (animatedFullWidthBody) {
-      tl = tl.to(bodyRef.current, { xPercent: leftSide ? 100 : -100 }, 0);
-    }
-    return tl.to(sidebarRef.current, { xPercent: 0 }, 0);
-  }
-  return tl.to(sidebarRef.current, { width: sidebarWidth }, 0);
-}
-
-function closeSidebar({
-  tl,
-  sidebarRef,
-  bodyRef,
-  fullWidth,
-  leftSide,
-  animatedFullWidthBody,
-}: {
-  tl: gsap.core.Timeline;
-  sidebarRef: React.RefObject<HTMLElement>;
-  bodyRef: React.RefObject<HTMLElement>;
-  fullWidth: boolean;
-  leftSide: boolean;
-  animatedFullWidthBody: boolean;
-}) {
-  if (fullWidth) {
-    if (animatedFullWidthBody) {
-      tl = tl.to(bodyRef.current, { xPercent: 0 }, 0);
-    }
-    return tl.to(sidebarRef.current, { xPercent: leftSide ? -100 : 100 }, 0);
-  }
-  return (tl = tl.to(sidebarRef.current, { width: 0 }, 0));
-}
-
 const useLiveRef = <T,>(value: T) => {
   const ref = useRef(value);
   useEffect(() => {
@@ -126,8 +76,56 @@ export const useSidebar = ({
 
   const toggleSidebar = useCallback(
     async (callback?: gsap.Callback) => {
-      console.log('toggleSidebar');
       if (!sidebarRef.current) return;
+      // Tech dept: when put outside
+      function openSidebar({
+        tl,
+        sidebarRef,
+        bodyRef,
+        sidebarWidth,
+        fullWidth,
+        animatedFullWidthBody,
+        leftSide,
+      }: {
+        tl: gsap.core.Timeline;
+        sidebarRef: React.RefObject<HTMLElement>;
+        bodyRef: React.RefObject<HTMLElement>;
+        fullWidth: boolean;
+        animatedFullWidthBody: boolean;
+        sidebarWidth: number | string;
+        leftSide: boolean;
+      }) {
+        if (fullWidth) {
+          if (animatedFullWidthBody) {
+            tl = tl.to(bodyRef.current, { xPercent: leftSide ? 100 : -100 }, 0);
+          }
+          return tl.to(sidebarRef.current, { xPercent: 0 }, 0);
+        }
+        return tl.to(sidebarRef.current, { width: sidebarWidth }, 0);
+      }
+      function closeSidebar({
+        tl,
+        sidebarRef,
+        bodyRef,
+        fullWidth,
+        leftSide,
+        animatedFullWidthBody,
+      }: {
+        tl: gsap.core.Timeline;
+        sidebarRef: React.RefObject<HTMLElement>;
+        bodyRef: React.RefObject<HTMLElement>;
+        fullWidth: boolean;
+        leftSide: boolean;
+        animatedFullWidthBody: boolean;
+      }) {
+        if (fullWidth) {
+          if (animatedFullWidthBody) {
+            tl = tl.to(bodyRef.current, { xPercent: 0 }, 0);
+          }
+          return tl.to(sidebarRef.current, { xPercent: leftSide ? -100 : 100 }, 0);
+        }
+        return tl.to(sidebarRef.current, { width: 0 }, 0);
+      }
 
       setInTransition(true);
       animationState.current.tl?.kill();
@@ -136,24 +134,27 @@ export const useSidebar = ({
         defaults: { duration: DURATION, ease: EASING },
       });
 
+      const closeArgs = {
+        tl,
+        sidebarRef,
+        fullWidth,
+        leftSide,
+        animatedFullWidthBody,
+        bodyRef,
+      };
+      const openArgs = {
+        tl,
+        sidebarRef,
+        sidebarWidth,
+        fullWidth,
+        animatedFullWidthBody,
+        bodyRef,
+        leftSide,
+      };
       animationState.current.tl = openStateRef.current
-        ? closeSidebar({
-            tl,
-            sidebarRef,
-            fullWidth,
-            leftSide,
-            animatedFullWidthBody,
-            bodyRef,
-          })
-        : openSidebar({
-            tl,
-            sidebarRef,
-            sidebarWidth,
-            fullWidth,
-            animatedFullWidthBody,
-            bodyRef,
-            leftSide,
-          });
+        ? closeSidebar(closeArgs)
+        : openSidebar(openArgs);
+
       setOpenState((v) => !v);
 
       animationState.current.tl?.call(() => {
